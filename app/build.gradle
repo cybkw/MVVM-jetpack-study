@@ -1,0 +1,84 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+    defaultConfig {
+        applicationId "com.bkw.study"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    dataBinding {
+        enabled true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation 'androidx.navigation:navigation-ui:2.2.2'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    testImplementation 'junit:junit:4.12'
+
+    def lifecycle_version = "2.2.0"
+    def room_version = "2.1.0"
+    def navigation_version = "2.2.0"
+    def smartfresh_version = "1.1.2"
+    def constraintlayout = "1.1.3"
+    def glide_version = "4.11.0"
+    def brvah_version = "3.0.2"
+    def bgabanner_version="3.0.0"
+
+    api project(path: ":network")
+
+    api "com.google.android.material:material:1.1.0"
+    api "androidx.recyclerview:recyclerview:$rootProject.androidXVersion"
+    api "androidx.appcompat:appcompat:$rootProject.androidXVersion"
+    api "androidx.constraintlayout:constraintlayout:$constraintlayout"
+    api "androidx.preference:preference:$rootProject.androidXVersion"
+    api "androidx.viewpager2:viewpager2:1.0.0"
+
+    api "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    api "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    //Room
+    api "android.arch.persistence.room:runtime:$room_version"
+    // room 配合 RxJava
+    api "android.arch.persistence.room:rxjava2:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+
+    //Navigation
+    api "androidx.navigation:navigation-fragment:$navigation_version"
+    api "androidx.navigation:navigation-ui:$navigation_version"
+
+    //1.0.5及以前版本的老用户升级需谨慎，API改动过大
+    api "com.scwang.smartrefresh:SmartRefreshLayout:$smartfresh_version"
+    //没有使用特殊Header，可以不加这行
+    api "com.scwang.smartrefresh:SmartRefreshHeader:$smartfresh_version"
+
+
+    api "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+
+    api "com.github.CymChad:BaseRecyclerViewAdapterHelper:$brvah_version"
+
+    implementation "cn.bingoogolapple:bga-banner:$bgabanner_version"
+
+
+}
