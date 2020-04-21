@@ -8,7 +8,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bkw.base.loadsir.EmptyCallback;
 import com.bkw.base.loadsir.ErrorCallback;
@@ -20,9 +26,29 @@ import com.kingja.loadsir.callback.Callback;
 import com.kingja.loadsir.core.LoadService;
 import com.kingja.loadsir.core.LoadSir;
 
-public abstract class BaseFragment2 extends Fragment {
-    private static final String TAG = "BaseFragment2";
+public abstract class BaseFragment<V extends ViewDataBinding, VM extends ViewModel> extends Fragment {
+    private static final String TAG = "BaseFragment";
+
+
     LoadService mLoadService;
+    protected V viewDataBinding;
+    protected VM viewModel;
+    private ViewModelProvider mFragmentProvider;
+    private ViewModelProvider mActivityProvider;
+
+    protected ViewModelProvider getActivityViewModelProvider(AppCompatActivity activity) {
+        if (mActivityProvider == null) {
+            mActivityProvider = new ViewModelProvider(activity);
+        }
+        return mActivityProvider;
+    }
+
+    protected ViewModelProvider getFragmentViewModelProvider(Fragment fragment) {
+        if (mFragmentProvider == null) {
+            mFragmentProvider = new ViewModelProvider(fragment);
+        }
+        return mFragmentProvider;
+    }
 
     /**
      * @return 页面标签
@@ -33,6 +59,13 @@ public abstract class BaseFragment2 extends Fragment {
      * @return 布局id
      */
     protected abstract int getLayoutId();
+
+    /**
+     * Model或ViewModel初始化：子类按需实现
+     *
+     * @return
+     */
+    protected abstract VM getViewModel();
 
     /**
      * 页面初始化：相关数据容器适配器
@@ -65,18 +98,19 @@ public abstract class BaseFragment2 extends Fragment {
         Log.d(TAG, "onCreate: " + getFragmentTag());
     }
 
-    protected View rootView;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(getLayoutId(), container, false);
-        return rootView;
+        Log.d(TAG, "onCreateView: " + getFragmentTag());
+        View root = inflater.inflate(getLayoutId(), container, false);
+        viewDataBinding = DataBindingUtil.bind(root);
+        return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated: " + getFragmentTag());
+        viewModel = getViewModel();
         init();
         setupListener();
     }

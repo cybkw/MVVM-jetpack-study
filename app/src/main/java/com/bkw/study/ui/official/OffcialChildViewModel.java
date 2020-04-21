@@ -1,4 +1,4 @@
 package com.bkw.study.ui.official;
 
-public class OfficialRepository {
+public class OffcialChildViewModel {
 }
